@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Vibe - Moda & Estilo</title>
+    <!-- Ícones (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- ESTILOS CSS --- */
+        :root {
+            --bg-color: #e5e5e5;
+            --text-color: #181818;
+            --primary-color: #1c1c1c;
+            --accent-color: #a9814d;
+            --card-bg: #f8f8f8;
+            --header-bg: #ffffff;
+            --gray-color: #686868;
+            --shadow: 0 4px 14px rgba(0,0,0,0.12);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #111111;
+            --text-color: #f3f3f3;
+            --primary-color: #d1a66e;
+            --accent-color: #a9814d;
+            --card-bg: #242424;
+            --header-bg: #181818;
+            --gray-color: #b9b9b9;
+            --shadow: 0 4px 14px rgba(0,0,0,0.45);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            background-image: radial-gradient(circle at 15% 20%, rgba(169,129,77,0.12) 0 7px, transparent 8px), radial-gradient(circle at 80% 65%, rgba(24,24,24,0.07) 0 10px, transparent 11px);
+            background-size: 90px 90px, 130px 130px;
+        }
+
+        /* Cabeçalho */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background-color: var(--header-bg);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border-bottom: 4px solid var(--accent-color);
+            padding-bottom: 2px;
+        }
+
+        .nav-menu ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-color);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .header-actions button {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--text-color);
+            position: relative;
+        }
+
+        .cart-container {
+            position: relative;
+        }
+
+        #cart-count {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        /* Barra de Pesquisa Oculta */
+        #search-bar-container {
+            background-color: var(--header-bg);
+            padding: 10px 5%;
+            text-align: center;
+            border-top: 1px solid var(--accent-color);
+        }
+
+        #search-bar-container.hidden {
+            display: none;
+        }
+
+        #search-input {
+            width: 100%;
+            max-width: 500px;
+            padding: 10px 15px;
+            border: 1px solid var(--primary-color);
+            border-radius: 20px;
+            outline: none;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        /* Carrossel */
+        .carousel {
+            position: relative;
+            width: min(420px, calc(100% - 32px));
+            height: 620px;
+            margin: 32px auto 0;
+            overflow: hidden;
+            border-radius: 18px;
+            border: 3px solid var(--accent-color);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+        }
+
+        .carousel-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .carousel-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-item.active {
+            opacity: 1;
+        }
+
+        .carousel-caption {
+            position: absolute;
+            bottom: 24px;
+            left: 24px;
+            right: 24px;
+            color: #000000;
+            padding: 20px 28px;
+            text-align: center;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.95);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .carousel-caption h2 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            color: #000000;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .carousel-caption p {
+            color: #000000;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+
+        .carousel-control {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.7);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: background 0.3s;
+        }
+
+        .carousel-control:hover {
+            background: white;
+        }
+
+        .carousel-control.prev { left: 20px; }
+        .carousel-control.next { right: 20px; }
+
+        /* Seção de Produtos */
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            color: var(--text-color);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        .product-card {
+            background-color: var(--card-bg);
+            border-top: 5px solid var(--accent-color);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .product-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .product-info .description {
+            font-size: 0.9rem;
+            color: var(--gray-color);
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        .product-info .price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .buy-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .buy-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Modal do Carrinho */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal.hidden {
+            display: none;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 450px;
+            position: relative;
+            box-shadow: var(--shadow);
+        }
+
+        #close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-color);
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+
+        .cart-total {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        #checkout-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* Rodapé */
+        footer {
+            background-color: var(--header-bg);
+            padding: 40px 5% 20px;
+            border-top: 1px solid var(--accent-color);
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-info h3, .footer-social h4 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .footer-info p {
+            margin-bottom: 8px;
+            color: var(--gray-color);
+            font-size: 0.95rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            transition: color 0.2s;
+        }
+
+        .social-icons a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid var(--accent-color);
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            .carousel {
+                width: calc(100% - 32px);
+                height: 520px;
+            }
+            .carousel-caption {
+                bottom: 16px;
+                left: 16px;
+                right: 16px;
+                padding: 14px 16px;
+            }
+            .carousel-caption h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cabeçalho -->
+    <header>
+        <div class="logo">
+            <h1>Stellar Vibe</h1>
+        </div>
+        <nav class="nav-menu">
+            <ul>
+                <li><a href="#">Início</a></li>
+                <li><a href="#produtos">Produtos</a></li>
+                <li><a href="#">Sobre</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+        </nav>
+        <div class="header-actions">
+            <button id="search-btn" title="Pesquisar"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <button id="theme-toggle" title="Alternar Tema"><i class="fa-solid fa-moon"></i></button>
+            <div class="cart-container">
+                <button id="cart-btn" title="Carrinho"><i class="fa-solid fa-cart-shopping"></i></button>
+                <span id="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Barra de Pesquisa Oculta -->
+    <div id="search-bar-container" class="hidden">
+        <input type="text" id="search-input" placeholder="O que você está procurando?">
+    </div>
+
+    <!-- Carrossel de Promoções -->
+    <section class="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active" style="background-image: url('IMG/carrosel 1.jpeg')">
+                <div class="carousel-caption">
+                    <h2>Nova Coleção Outono/Inverno</h2>
+                    <p>Descubra as tendências que combinam com o seu estilo.</p>
+                </div>
+            </div>
+            <div class="carousel-item" style="background-image: url('IMG/carrosel 3.jpeg')">
+                <div class="carousel-caption">
+                    <h2>Promoções Imperdíveis</h2>
+                    <p>Até 50% de desconto em produtos selecionados.</p>
+                </div>
+            </div>
+            <div class="carousel-item" style="background-image: url('IMG/carrosel 4.jpg')">
+                <div class="carousel-caption">
+                    <h2>Elegância em Cada Detalhe</h2>
+                    <p>Acessórios e roupas para todas as ocasiões.</p>
+                </div>
+            </div>
+            <div class="carousel-item" style="background-image: url('IMG/carrosel 5.jpeg')">
+                <div class="carousel-caption">
+                    <h2>Frete Grátis</h2>
+                    <p>Em compras acima de R$ 200 para todo o Brasil.</p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control prev" id="prev-btn"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="carousel-control next" id="next-btn"><i class="fa-solid fa-chevron-right"></i></button>
+    </section>
+
+    <!-- Seção de Produtos -->
+    <main class="container" id="produtos">
+        <h2 class="section-title">Destaques da Semana</h2>
+        <div class="product-grid">
+            <!-- Produto 1 -->
+            <div class="product-card">
+                <img src="IMG/camisa star.webp" alt="Camiseta Stars">
+                <div class="product-info">
+                    <h3>Camiseta Stars</h3>
+                    <p class="description">Tecido macio de alta qualidade, ideal para o dia a dia com muito charme.</p>
+                    <span class="price">R$ 129,90</span>
+                    <button class="buy-btn" data-name="Camiseta Stars" data-price="129.90">Comprar agora</button>
+                </div>
+            </div>
+            <!-- Produto 2 -->
+            <div class="product-card">
+                <img src="IMG/bolsa zadig.jpeg" alt="Bolsa Zadig">
+                <div class="product-info">
+                    <h3>Bolsa Zadig</h3>
+                    <p class="description">Design sofisticado em tom terroso, perfeita para acompanhar sua rotina.</p>
+                    <span class="price">R$ 219,90</span>
+                    <button class="buy-btn" data-name="Bolsa Zadig" data-price="219.90">Comprar agora</button>
+                </div>
+            </div>
+            <!-- Produto 3 -->
+            <div class="product-card">
+                <img src="IMG/tênis stars.webp" alt="Tênis Star">
+                <div class="product-info">
+                    <h3>Tênis Star</h3>
+                    <p class="description">Conforto absoluto e elegância sutil para os seus pés em qualquer ocasião.</p>
+                    <span class="price">R$ 179,90</span>
+                    <button class="buy-btn" data-name="Tênis Star" data-price="179.90">Comprar agora</button>
+                </div>
+            </div>
+            <!-- Produto 4 -->
+            <div class="product-card">
+                <img src="IMG/calça angel.webp" alt="Calça Angel">
+                <div class="product-info">
+                    <h3>Calça Angel</h3>
+                    <p class="description">Design moderno e confortável para acompanhar seu estilo em qualquer ocasião.</p>
+                    <span class="price">R$ 89,90</span>
+                    <button class="buy-btn" data-name="Calça Angel" data-price="89.90">Comprar agora</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal do Carrinho -->
+    <div id="cart-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+        <div class="modal-content">
+            <span id="close-modal">&times;</span>
+            <h2 id="cart-title">Seu Carrinho de Compras</h2>
+            <div id="cart-items">
+                <!-- Itens adicionados via JS aparecerão aqui -->
+            </div>
+            <div class="cart-total">
+                <p>Total: <span id="total-price">R$ 0,00</span></p>
+                <button id="checkout-btn">Finalizar Compra</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer id="contato">
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>Stellar Vibe</h3>
+                <p><i class="fa-solid fa-location-dot"></i> Rua da Moda, 123 - São Paulo, SP</p>
+                <p><i class="fa-solid fa-phone"></i> (11) 98765-4321</p>
+                <p><i class="fa-solid fa-envelope"></i> contato@chicstore.com</p>
+            </div>
+            <div class="footer-social">
+                <h4>Redes Sociais</h4>
+                <div class="social-icons">
+                    <a href="#" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="#" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Stellar Vibe. Todos os direitos reservados.</p>
+            <p>Projeto criado por Giovanna Vieira.</p>
+        </div>
+    </footer>
+
+    <script>
+        /* --- CÓDIGO JAVASCRIPT --- */
+
+        // Carrossel
+        const slides = document.querySelectorAll('.carousel-item');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        let currentSlide = 0;
+        let slideInterval;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        function prevSlideFunc() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        nextBtn.addEventListener('click', () => {
+            nextSlide();
+            resetInterval();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            prevSlideFunc();
+            resetInterval();
+        });
+
+        function startInterval() {
+            slideInterval = setInterval(nextSlide, 4000);
+        }
+
+        function resetInterval() {
+            clearInterval(slideInterval);
+            startInterval();
+        }
+
+        startInterval();
+
+        // Tema Claro / Escuro
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                htmlElement.setAttribute('data-theme', 'dark');
+                themeToggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+                themeToggleBtn.setAttribute('aria-label', 'Usar tema claro');
+            } else {
+                htmlElement.removeAttribute('data-theme');
+                themeToggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+                themeToggleBtn.setAttribute('aria-label', 'Usar tema escuro');
+            }
+        }
+
+        const savedTheme = localStorage.getItem('chicstore-theme');
+        applyTheme(savedTheme || 'light');
+
+        themeToggleBtn.addEventListener('click', () => {
+            const nextTheme = htmlElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            applyTheme(nextTheme);
+            localStorage.setItem('chicstore-theme', nextTheme);
+        });
+
+        // Barra de Pesquisa
+        const searchBtn = document.getElementById('search-btn');
+        const searchContainer = document.getElementById('search-bar-container');
+        const searchInput = document.getElementById('search-input');
+        const productCards = document.querySelectorAll('.product-card');
+
+        searchBtn.setAttribute('aria-expanded', 'false');
+        searchBtn.addEventListener('click', () => {
+            const isOpening = searchContainer.classList.contains('hidden');
+            searchContainer.classList.toggle('hidden');
+            searchBtn.setAttribute('aria-expanded', String(isOpening));
+            if (isOpening) {
+                searchInput.focus();
+            } else {
+                searchInput.value = '';
+                filterProducts('');
+            }
+        });
+
+        function filterProducts(query) {
+            const normalizedQuery = query.trim().toLowerCase();
+            productCards.forEach(card => {
+                const matches = card.textContent.toLowerCase().includes(normalizedQuery);
+                card.hidden = !matches;
+            });
+        }
+
+        searchInput.addEventListener('input', () => filterProducts(searchInput.value));
+
+        // Carrinho de Compras
+        let cart = [];
+
+        try {
+            const savedCart = JSON.parse(localStorage.getItem('chicstore-cart') || '[]');
+            if (Array.isArray(savedCart)) {
+                cart = savedCart.filter(item =>
+                    item && typeof item.name === 'string' &&
+                    Number.isFinite(item.price) && Number.isInteger(item.quantity) && item.quantity > 0
+                );
+            }
+        } catch (error) {
+            cart = [];
+        }
+
+        function saveCart() {
+            localStorage.setItem('chicstore-cart', JSON.stringify(cart));
+        }
+        const cartBtn = document.getElementById('cart-btn');
+        const cartModal = document.getElementById('cart-modal');
+        const closeModal = document.getElementById('close-modal');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartCount = document.getElementById('cart-count');
+        const totalPriceEl = document.getElementById('total-price');
+        const buyButtons = document.querySelectorAll('.buy-btn');
+        const checkoutBtn = document.getElementById('checkout-btn');
+
+        cartBtn.addEventListener('click', () => cartModal.classList.remove('hidden'));
+        closeModal.addEventListener('click', () => cartModal.classList.add('hidden'));
+        window.addEventListener('click', (e) => {
+            if (e.target === cartModal) cartModal.classList.add('hidden');
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') cartModal.classList.add('hidden');
+        });
+
+        buyButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const name = e.currentTarget.getAttribute('data-name');
+                const price = parseFloat(e.currentTarget.getAttribute('data-price'));
+
+                const existingItem = cart.find(item => item.name === name);
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({ name, price, quantity: 1 });
+                }
+
+                updateCart();
+                cartModal.classList.remove('hidden');
+            });
+        });
+
+        function updateCart() {
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+            let totalCount = 0;
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p>Seu carrinho está vazio.</p>';
+            } else {
+                cart.forEach((item, index) => {
+                    total += item.price * item.quantity;
+                    totalCount += item.quantity;
+
+                    const itemEl = document.createElement('div');
+                    itemEl.classList.add('cart-item');
+                    itemEl.innerHTML = `
+                        <div>
+                            <h4>${item.name}</h4>
+                            <small>${formatCurrency(item.price)} x ${item.quantity}</small>
+                        </div>
+                        <button onclick="removeItem(${index})" style="background:none; border:none; color:red; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
+                    `;
+                    cartItemsContainer.appendChild(itemEl);
+                });
+            }
+
+            cartCount.textContent = totalCount;
+            totalPriceEl.textContent = formatCurrency(total);
+            saveCart();
+        }
+
+        function formatCurrency(value) {
+            return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        window.removeItem = function(index) {
+            cart.splice(index, 1);
+            updateCart();
+        };
+
+        updateCart();
+
+        checkoutBtn.addEventListener('click', () => {
+            if (cart.length === 0) {
+                alert('Seu carrinho está vazio!');
+                return;
+            }
+            alert('Compra finalizada com sucesso! Obrigado por comprar na Stellar Vibe.');
+            cart = [];
+            updateCart();
+            cartModal.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
